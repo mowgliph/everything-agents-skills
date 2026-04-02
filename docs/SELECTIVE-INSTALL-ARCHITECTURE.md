@@ -204,7 +204,7 @@ or, in compatibility mode:
 ```json
 {
   "mode": "legacy-compat",
-  "target": "claude",
+  "target": "qwen",
   "profile": null,
   "modules": [],
   "legacyLanguages": ["typescript", "python"],
@@ -259,7 +259,7 @@ This is where target-specific meaning should live.
 
 Examples:
 
-- Claude may preserve native hierarchy under `~/.claude`
+- Qwen Code may preserve native hierarchy under `~/.qwen`
 - Cursor may sync bundled `.cursor` root children differently from rules
 - generated configs may require merge or replace semantics depending on target
 
@@ -272,7 +272,7 @@ Suggested evolution:
 
 ```text
 scripts/lib/install/targets/registry.js
-scripts/lib/install/targets/claude-home.js
+scripts/lib/install/targets/qwen-home.js
 scripts/lib/install/targets/cursor-project.js
 scripts/lib/install/targets/antigravity-project.js
 ```
@@ -375,7 +375,7 @@ scripts/lib/install/
   state-store.js
   targets/
     registry.js
-    claude-home.js
+    qwen-home.js
     cursor-project.js
     antigravity-project.js
     codex-home.js
@@ -470,7 +470,7 @@ That means ECC 2.0 needs two contracts, not one:
 - a content contract
   what modules exist and how they depend on each other
 - a target contract
-  how those modules land inside Claude, Cursor, Antigravity, Codex, or OpenCode
+  how those modules land inside Qwen Code, Cursor, Antigravity, Codex, or OpenCode
 
 The current repo only had the first half in early form.
 The current repo now has the first full vertical slice, but not the full
@@ -478,7 +478,7 @@ target-specific semantics.
 
 ## Design Constraints
 
-1. Keep `everything-claude-code` as the canonical source repo.
+1. Keep `everything-qwen-code` as the canonical source repo.
 2. Preserve existing `install.sh` flows during migration.
 3. Support home-scoped and project-scoped targets from the same planner.
 4. Make uninstall/repair/doctor possible without guessing.
@@ -523,7 +523,7 @@ Suggested future shape:
   "id": "hooks-runtime",
   "kind": "hooks",
   "paths": ["hooks", "scripts/hooks"],
-  "targets": ["claude", "cursor", "opencode"],
+  "targets": ["qwen", "cursor", "opencode"],
   "dependencies": [],
   "installStrategy": "copy",
   "pathMode": "preserve",
@@ -557,7 +557,7 @@ Fields still needed:
 
 That lets ECC 2.0 say things like:
 
-- `developer` is the recommended default for Claude and Cursor
+- `developer` is the recommended default for Qwen Code and Cursor
 - `research` may be heavy for narrow local installs
 - `full` is allowed but not default
 
@@ -567,7 +567,7 @@ This is the main missing layer.
 
 The module graph should not know:
 
-- where Claude home lives
+- where Qwen home lives
 - how Cursor flattens or remaps content
 - which config files need merge semantics instead of blind copy
 
@@ -588,8 +588,8 @@ type InstallTargetAdapter = {
 
 Suggested first adapters:
 
-1. `claude-home`
-   writes into `~/.claude/...`
+1. `qwen-home`
+   writes into `~/.qwen/...`
 2. `cursor-project`
    writes into `./.cursor/...`
 3. `antigravity-project`
@@ -640,7 +640,7 @@ Suggested operation shape:
   "kind": "copy",
   "moduleId": "rules-core",
   "source": "rules/common/coding-style.md",
-  "destination": "/Users/example/.claude/rules/common/coding-style.md",
+  "destination": "/Users/example/.qwen/rules/common/coding-style.md",
   "ownership": "managed",
   "overwritePolicy": "replace"
 }
@@ -663,8 +663,8 @@ Install-state is the durable contract that ECC 1.x is missing.
 
 Suggested path conventions:
 
-- Claude target:
-  `~/.claude/ecc/install-state.json`
+- Qwen target:
+  `~/.qwen/ecc/install-state.json`
 - Cursor target:
   `./.cursor/ecc-install-state.json`
 - Antigravity target:
@@ -680,8 +680,8 @@ Suggested payload:
   "installedAt": "2026-03-13T00:00:00Z",
   "lastValidatedAt": "2026-03-13T00:00:00Z",
   "target": {
-    "id": "claude-home",
-    "root": "/Users/example/.claude"
+    "id": "qwen-home",
+    "root": "/Users/example/.qwen"
   },
   "request": {
     "profile": "developer",
@@ -711,7 +711,7 @@ Suggested payload:
     {
       "kind": "copy",
       "moduleId": "rules-core",
-      "destination": "/Users/example/.claude/rules/common/coding-style.md",
+      "destination": "/Users/example/.qwen/rules/common/coding-style.md",
       "digest": "sha256:..."
     }
   ]
@@ -781,7 +781,7 @@ Responsibilities:
 
 Current `install.sh` accepts:
 
-- `--target <claude|cursor|antigravity>`
+- `--target <qwen|cursor|antigravity>`
 - a list of language names
 
 That behavior cannot disappear in one cut because users already depend on it.
@@ -843,7 +843,7 @@ Suggested next files:
 
 ```text
 scripts/lib/install-targets/
-  claude-home.js
+  qwen-home.js
   cursor-project.js
   antigravity-project.js
   registry.js
@@ -874,7 +874,7 @@ keep growing per-target shell branches.
 
 ### Phase 2: Target Adapters
 
-1. extract Claude install behavior into `claude-home` adapter
+1. extract Qwen install behavior into `qwen-home` adapter
 2. extract Cursor install behavior into `cursor-project` adapter
 3. extract Antigravity install behavior into `antigravity-project` adapter
 4. reduce `install.sh` to argument parsing plus adapter invocation
@@ -916,7 +916,7 @@ The highest-signal next implementation moves in this repo are:
    adapter logic?
 4. Should heavy skill families eventually move to fetch-on-demand rather than
    package-time inclusion?
-5. Should Codex and OpenCode target adapters ship only after the Claude/Cursor
+5. Should Codex and OpenCode target adapters ship only after the Qwen/Cursor
    lifecycle commands are stable?
 
 ## Recommendation
