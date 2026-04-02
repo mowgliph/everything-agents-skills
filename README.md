@@ -176,7 +176,9 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
 
-This project was inspired by the excellent Everything Claude Code project.
+This project was inspired by and forked from the excellent [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) project by [@affaan-m](https://github.com/affaan-m). The original project was built for Claude Code, and this adaptation brings the same powerful patterns, agents, skills, and workflows to **Qwen Code**.
+
+Thanks to the original author for creating an amazing foundation to build upon.
 
 ## Links
 
