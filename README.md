@@ -1,7 +1,14 @@
 ﻿# Everything Qwen Code
 
-[![Stars](https://img.shields.io/github/stars/your-username/everything-qwen-code?style=flat)](https://github.com/your-username/everything-qwen-code/stargazers)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/mowgliph/everything-qwen-code/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/mowgliph/everything-qwen-code?style=flat)](https://github.com/mowgliph/everything-qwen-code/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/mowgliph/everything-qwen-code)](https://github.com/mowgliph/everything-qwen-code/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/mowgliph/everything-qwen-code)](https://github.com/mowgliph/everything-qwen-code/pulls)
+[![GitHub contributors](https://img.shields.io/github/contributors/mowgliph/everything-qwen-code)](https://github.com/mowgliph/everything-qwen-code/graphs/contributors)
+[![GitHub forks](https://img.shields.io/github/forks/mowgliph/everything-qwen-code)](https://github.com/mowgliph/everything-qwen-code/network)
+[![Last commit](https://img.shields.io/github/last-commit/mowgliph/everything-qwen-code)](https://github.com/mowgliph/everything-qwen-code/commits/main)
+[![Repository size](https://img.shields.io/github/repo-size/mowgliph/everything-qwen-code)](https://github.com/mowgliph/everything-qwen-code)
 
 **The performance optimization system for Qwen Code. From production experience.**
 
@@ -17,7 +24,7 @@ Built exclusively for **Qwen Code**.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/everything-qwen-code.git
+git clone https://github.com/mowgliph/everything-qwen-code.git
 cd everything-qwen-code
 
 # Install dependencies
@@ -169,4 +176,12 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
 
-This project was inspired by the excellent Everything Claude Code project.
+This project was inspired by and forked from the excellent [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) project by [@affaan-m](https://github.com/affaan-m). The original project was built for Claude Code, and this adaptation brings the same powerful patterns, agents, skills, and workflows to **Qwen Code**.
+
+Thanks to the original author for creating an amazing foundation to build upon.
+
+## Links
+
+- [GitHub Repository](https://github.com/mowgliph/everything-qwen-code)
+- [Issues](https://github.com/mowgliph/everything-qwen-code/issues)
+- [Pull Requests](https://github.com/mowgliph/everything-qwen-code/pulls)
