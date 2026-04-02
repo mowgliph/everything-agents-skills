@@ -403,17 +403,29 @@ function getMcpById(id) {
 }
 
 /**
- * Get all unique categories
- * @returns {string[]} Sorted array of unique categories
+ * Get all unique categories with MCP counts
+ * @returns {Object<string, number>} Object with category names as keys and counts as values
  */
 function getMcpCategories() {
-  const categories = new Set(MCP_CATALOG.map(mcp => mcp.category));
-  return [...categories].sort();
+  const categories = {};
+  MCP_CATALOG.forEach(mcp => {
+    categories[mcp.category] = (categories[mcp.category] || 0) + 1;
+  });
+  return categories;
+}
+
+/**
+ * Get MCP servers that require API key
+ * @returns {McpServer[]} MCP servers requiring API key
+ */
+function getPaidMcpServers() {
+  return MCP_CATALOG.filter(mcp => mcp.requiresApiKey === true);
 }
 
 module.exports = {
   getMcpCatalog,
   getFreeMcpServers,
+  getPaidMcpServers,
   getMcpByCategory,
   getMcpById,
   getMcpCategories,

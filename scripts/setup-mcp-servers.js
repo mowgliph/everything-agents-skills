@@ -100,7 +100,7 @@ Examples:
   node scripts/setup-mcp-servers.js --list --recommended
 
 MCP Categories:
-  ${getMcpCategories().join(', ')}
+  ${Object.keys(getMcpCategories()).join(', ')}
 
 Free MCP Servers (auto-installed):
   ${getFreeMcpServers(true).map(mcp => mcp.id).join(', ')}
@@ -116,10 +116,11 @@ Note: MCPs marked with [API Key] require API credentials to function.
 function listMcps(recommendedOnly = false) {
   console.log('\n📋 MCP Servers Catalog\n');
   console.log('='.repeat(60));
-  
+
   const catalog = getMcpCatalog();
-  const categories = getMcpCategories();
-  
+  const categoryCounts = getMcpCategories();
+  const categories = Object.keys(categoryCounts).sort();
+
   for (const category of categories) {
     const categoryMcps = getMcpByCategory(category);
     const filteredMcps = recommendedOnly 

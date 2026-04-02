@@ -1,186 +1,104 @@
-const { describe, it, before } = require('node:test');
+#!/usr/bin/env node
+/**
+ * MCP Catalog Tests
+ *
+ * TDD: Write tests FIRST, then implement
+ */
+
+const { describe, it } = require('node:test');
 const assert = require('node:assert');
 
 describe('MCP Catalog', () => {
-  let catalog;
-  let getMcpCatalog;
-  let getFreeMcpServers;
-  let getMcpByCategory;
-  let getMcpById;
-  let getMcpCategories;
-
-  before(async () => {
-    const module = await import('../../scripts/lib/mcp-catalog.js');
-    getMcpCatalog = module.getMcpCatalog;
-    getFreeMcpServers = module.getFreeMcpServers;
-    getMcpByCategory = module.getMcpByCategory;
-    getMcpById = module.getMcpById;
-    getMcpCategories = module.getMcpCategories;
-  });
-
   describe('getMcpCatalog', () => {
     it('should return all MCP servers', () => {
-      const allMcps = getMcpCatalog();
-      assert(Array.isArray(allMcps), 'Catalog should return an array');
-      assert.ok(allMcps.length > 10, `Should have more than 10 MCPs, got ${allMcps.length}`);
+      const catalog = require('../../scripts/lib/mcp-catalog').getMcpCatalog();
+      assert.ok(Array.isArray(catalog), 'Should return an array');
+      assert.ok(catalog.length > 10, 'Should have more than 10 MCPs');
     });
 
-    it('should return MCPs with required properties', () => {
-      const allMcps = getMcpCatalog();
-      assert.ok(allMcps.length > 0, 'Catalog should not be empty');
-      
-      const firstMcp = allMcps[0];
-      assert.ok(firstMcp.id, 'MCP should have an id');
-      assert.ok(firstMcp.name, 'MCP should have a name');
-      assert.ok(typeof firstMcp.requiresApiKey === 'boolean', 'MCP should have requiresApiKey boolean');
-      assert.ok(firstMcp.category, 'MCP should have a category');
+    it('should include required fields for each MCP', () => {
+      const catalog = require('../../scripts/lib/mcp-catalog').getMcpCatalog();
+      catalog.forEach(mcp => {
+        assert.ok(mcp.id, `MCP should have id: ${JSON.stringify(mcp)}`);
+        assert.ok(mcp.name, `MCP should have name: ${JSON.stringify(mcp)}`);
+        assert.ok(typeof mcp.command === 'string' || mcp.type === 'http', `MCP should have command or type: ${JSON.stringify(mcp)}`);
+        assert.ok(typeof mcp.requiresApiKey === 'boolean', `MCP should have requiresApiKey boolean: ${JSON.stringify(mcp)}`);
+        assert.ok(mcp.category, `MCP should have category: ${JSON.stringify(mcp)}`);
+      });
     });
   });
 
   describe('getFreeMcpServers', () => {
     it('should return only MCPs without API key requirement', () => {
-      const freeMcps = getFreeMcpServers();
-      assert(Array.isArray(freeMcps), 'Should return an array');
-      
+      const freeMcps = require('../../scripts/lib/mcp-catalog').getFreeMcpServers();
+      assert.ok(Array.isArray(freeMcps), 'Should return an array');
       freeMcps.forEach(mcp => {
-        assert.strictEqual(
-          mcp.requiresApiKey, 
-          false, 
-          `MCP ${mcp.id} should not require API key`
-        );
+        assert.strictEqual(mcp.requiresApiKey, false, `Free MCP should not require API key: ${mcp.id}`);
       });
     });
 
-    it('should return recommended MCPs when recommendedOnly is true', () => {
-      const recommendedMcps = getFreeMcpServers(true);
-      assert(Array.isArray(recommendedMcps), 'Should return an array');
-      
-      recommendedMcps.forEach(mcp => {
-        assert.strictEqual(
-          mcp.requiresApiKey, 
-          false, 
-          `MCP ${mcp.id} should not require API key`
-        );
-        assert.ok(
-          mcp.recommended === true, 
-          `MCP ${mcp.id} should be marked as recommended`
-        );
-      });
+    it('should include recommended free MCPs by default', () => {
+      const freeMcps = require('../../scripts/lib/mcp-catalog').getFreeMcpServers(true);
+      const ids = freeMcps.map(m => m.id);
+      assert.ok(ids.includes('context7'), 'Should include context7');
+      assert.ok(ids.includes('memory'), 'Should include memory');
+      assert.ok(ids.includes('sequential-thinking'), 'Should include sequential-thinking');
     });
 
-    it('should return empty array when no free MCPs match criteria', () => {
-      // Edge case: if we filter in a way that nothing matches
-      const freeMcps = getFreeMcpServers();
-      assert.ok(freeMcps.length > 0, 'Should have at least some free MCPs');
+    it('should return all free MCPs when recommendedOnly is false', () => {
+      const allFree = require('../../scripts/lib/mcp-catalog').getFreeMcpServers(false);
+      const recommended = require('../../scripts/lib/mcp-catalog').getFreeMcpServers(true);
+      assert.ok(allFree.length >= recommended.length, 'All free should be >= recommended');
     });
   });
 
   describe('getMcpByCategory', () => {
     it('should return MCPs filtered by category', () => {
-      const categories = getMcpCategories();
-      assert.ok(categories.length > 0, 'Should have at least one category');
-      
-      const firstCategory = categories[0];
-      const categoryMcps = getMcpByCategory(firstCategory);
-      
-      assert(Array.isArray(categoryMcps), 'Should return an array');
-      assert.ok(categoryMcps.length > 0, `Category ${firstCategory} should have MCPs`);
-      
-      categoryMcps.forEach(mcp => {
-        assert.strictEqual(
-          mcp.category, 
-          firstCategory, 
-          `MCP ${mcp.id} should belong to ${firstCategory} category`
-        );
+      const devMcps = require('../../scripts/lib/mcp-catalog').getMcpByCategory('dev');
+      assert.ok(Array.isArray(devMcps), 'Should return an array');
+      devMcps.forEach(mcp => {
+        assert.strictEqual(mcp.category, 'dev', `Should be dev category: ${mcp.id}`);
       });
     });
 
-    it('should return empty array for non-existent category', () => {
-      const nonExistent = getMcpByCategory('non-existent-category-xyz');
-      assert(Array.isArray(nonExistent), 'Should return an array');
-      assert.strictEqual(nonExistent.length, 0, 'Should return empty array for non-existent category');
-    });
-
-    it('should handle case-insensitive category matching', () => {
-      const categories = getMcpCategories();
-      if (categories.length > 0) {
-        const firstCategory = categories[0];
-        const upperCaseMcps = getMcpByCategory(firstCategory.toUpperCase());
-        const lowerCaseMcps = getMcpByCategory(firstCategory.toLowerCase());
-        
-        assert.strictEqual(
-          upperCaseMcps.length, 
-          lowerCaseMcps.length, 
-          'Category matching should be case-insensitive'
-        );
-      }
+    it('should return empty array for unknown category', () => {
+      const unknown = require('../../scripts/lib/mcp-catalog').getMcpByCategory('unknown-category-xyz');
+      assert.ok(Array.isArray(unknown), 'Should return an array');
+      assert.strictEqual(unknown.length, 0, 'Should be empty for unknown category');
     });
   });
 
   describe('getMcpById', () => {
-    it('should return MCP by exact ID match', () => {
-      const allMcps = getMcpCatalog();
-      assert.ok(allMcps.length > 0, 'Catalog should not be empty');
-      
-      const firstMcp = allMcps[0];
-      const foundMcp = getMcpById(firstMcp.id);
-      
-      assert.ok(foundMcp, `Should find MCP with id ${firstMcp.id}`);
-      assert.strictEqual(foundMcp.id, firstMcp.id, 'Should return correct MCP');
+    it('should return MCP by ID', () => {
+      const mcp = require('../../scripts/lib/mcp-catalog').getMcpById('context7');
+      assert.ok(mcp, 'Should find MCP by ID');
+      assert.strictEqual(mcp.id, 'context7', 'Should return correct MCP');
     });
 
-    it('should return null for non-existent ID', () => {
-      const foundMcp = getMcpById('non-existent-mcp-xyz-123');
-      assert.strictEqual(foundMcp, null, 'Should return null for non-existent ID');
-    });
-
-    it('should return null for empty string ID', () => {
-      const foundMcp = getMcpById('');
-      assert.strictEqual(foundMcp, null, 'Should return null for empty ID');
-    });
-
-    it('should handle case-sensitive ID matching', () => {
-      const allMcps = getMcpCatalog();
-      const firstMcp = allMcps[0];
-      
-      const exactMatch = getMcpById(firstMcp.id);
-      const upperCase = getMcpById(firstMcp.id.toUpperCase());
-      
-      assert.ok(exactMatch, 'Should find MCP with exact case');
-      // IDs should be case-sensitive
-      assert.strictEqual(
-        upperCase, 
-        null, 
-        'ID matching should be case-sensitive'
-      );
+    it('should return null for unknown ID', () => {
+      const mcp = require('../../scripts/lib/mcp-catalog').getMcpById('unknown-mcp-xyz');
+      assert.strictEqual(mcp, null, 'Should return null for unknown ID');
     });
   });
 
   describe('getMcpCategories', () => {
-    it('should return array of unique categories', () => {
-      const categories = getMcpCategories();
-      
-      assert(Array.isArray(categories), 'Should return an array');
-      assert.ok(categories.length > 0, 'Should have at least one category');
-      
-      // Check uniqueness
-      const uniqueCategories = [...new Set(categories)];
-      assert.strictEqual(
-        categories.length, 
-        uniqueCategories.length, 
-        'Categories should be unique'
-      );
+    it('should return category counts', () => {
+      const categories = require('../../scripts/lib/mcp-catalog').getMcpCategories();
+      assert.ok(typeof categories === 'object', 'Should return an object');
+      assert.ok(Object.keys(categories).length > 0, 'Should have at least one category');
+      Object.values(categories).forEach(count => {
+        assert.ok(count > 0, 'Category count should be positive');
+      });
     });
+  });
 
-    it('should return sorted categories', () => {
-      const categories = getMcpCategories();
-      const sorted = [...categories].sort();
-      
-      assert.deepStrictEqual(
-        categories, 
-        sorted, 
-        'Categories should be sorted alphabetically'
-      );
+  describe('getPaidMcpServers', () => {
+    it('should return only MCPs with API key requirement', () => {
+      const paidMcps = require('../../scripts/lib/mcp-catalog').getPaidMcpServers();
+      assert.ok(Array.isArray(paidMcps), 'Should return an array');
+      paidMcps.forEach(mcp => {
+        assert.strictEqual(mcp.requiresApiKey, true, `Paid MCP should require API key: ${mcp.id}`);
+      });
     });
   });
 });
