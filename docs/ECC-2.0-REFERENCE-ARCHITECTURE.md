@@ -6,7 +6,7 @@ Research summary from competitor/reference analysis (2026-03-22).
 
 | Project | Stars | Language | Type | Multi-Agent | Worktrees | Terminal-native |
 |---------|-------|----------|------|-------------|-----------|-----------------|
-| **ECC 2.0** | - | Rust | TUI | Yes | Yes | **Yes (SSH)** |
+| **EQC 2.0** | - | Rust | TUI | Yes | Yes | **Yes (SSH)** |
 | superset-sh/superset | 7.7K | TypeScript | Electron | Yes | Yes | No (desktop) |
 | standardagents/dmux | 1.2K | TypeScript | TUI (Ink) | Yes | Yes | Yes |
 | opencode-ai/opencode | 11.5K | Go | TUI | No | No | Yes |

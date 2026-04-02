@@ -26,9 +26,9 @@ ECC remaps its component structure to match Antigravity's expected layout:
 
 > **Note on `.agents/` vs `.agent/` vs `agents/`**: The installer only handles three source paths explicitly: `rules` → `.agent/rules/`, `commands` → `.agent/workflows/`, and `agents` (no dot prefix) → `.agent/skills/`. The dot-prefixed `.agents/` directory in the ECC repo is a **static layout** for Codex/Antigravity skill definitions and `openai.yaml` configs — it is not directly mapped by the installer. Any `.agents/` path falls through to the default scaffold operation. If you want `.agents/skills/` content available in the Antigravity runtime, you must manually copy it to `.agent/skills/`.
 
-### Key Differences from Claude Code
+### Key Differences from Qwen Code
 
-- **Rules are flattened**: Claude Code nests rules under subdirectories (`rules/common/`, `rules/typescript/`). Antigravity expects a flat `rules/` directory — the installer handles this automatically.
+- **Rules are flattened**: Qwen Code nests rules under subdirectories (`.qwen/rules/common/`, `.qwen/rules/typescript/`). Antigravity expects a flat `rules/` directory — the installer handles this automatically.
 - **Commands become workflows**: ECC's `/command` files land in `.agent/workflows/`, which is Antigravity's equivalent of slash commands.
 - **Agents become skills**: ECC agent definitions map to `.agent/skills/`, where Antigravity looks for skill configurations.
 
@@ -121,10 +121,10 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full contribution guide.
 
 ## Comparison with Other Targets
 
-| Feature | Claude Code | Cursor | Codex | Antigravity |
-|---------|-------------|--------|-------|-------------|
-| Install target | `claude-home` | `cursor-project` | `codex-home` | `antigravity` |
-| Config root | `~/.claude/` | `.cursor/` | `~/.codex/` | `.agent/` |
+| Feature | Qwen Code | Cursor | Codex | Antigravity |
+|---------|-----------|--------|-------|-------------|
+| Install target | `qwen-home` | `cursor-project` | `codex-home` | `antigravity` |
+| Config root | `~/.qwen/` | `.cursor/` | `~/.codex/` | `.agent/` |
 | Scope | User-level | Project-level | User-level | Project-level |
 | Rules format | Nested dirs | Flat | Flat | Flat |
 | Commands | `commands/` | N/A | N/A | `workflows/` |
