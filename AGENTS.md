@@ -1,6 +1,6 @@
 ﻿# Everything Qwen Code (ECC) â€” Agent Instructions
 
-This is a **production-ready AI coding plugin** providing 36 specialized agents, 151 skills, 68 commands, and automated hook workflows for software development.
+This is a **production-ready AI coding plugin** providing 36 specialized agents, 323 skills, 68 commands, and automated hook workflows for software development.
 
 **Version:** 1.9.0
 
