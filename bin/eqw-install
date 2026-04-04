@@ -202,6 +202,88 @@ function isInteractive() {
   return process.stdin.isTTY;
 }
 
+/**
+ * Interactive prompt for file conflicts.
+ * Always returns a Promise resolving to: 'overwrite' | 'skip' | 'all-overwrite' | 'quit'
+ */
+function showDiffPrompt(relPath, src, dest, flags) {
+  return new Promise((resolve) => {
+    try {
+      const srcStat = fs.statSync(src);
+      const destStat = fs.statSync(dest);
+      const srcSize = formatSize(srcStat.size);
+      const destSize = formatSize(destStat.size);
+
+      log(`\n⚠ File differs: ${relPath}`, 'yellow');
+      log(`  Local: ${destSize} | Incoming: ${srcSize}`, 'yellow');
+    } catch (err) {
+      logWarn(`Cannot stat files for diff prompt: ${relPath}`);
+      resolve('skip');
+      return;
+    }
+
+    if (flags && flags.dryRun) {
+      log('  [DRY RUN] Would overwrite', 'cyan');
+      resolve('skip');
+      return;
+    }
+
+    if (!isInteractive()) {
+      logWarn(`Non-interactive mode: skipping ${relPath}`);
+      resolve('skip');
+      return;
+    }
+
+    const readline = require('readline');
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    const ask = () => {
+      rl.question('  [O]verwrite  [S]kip  [D]iff  [A]ll overwrite  [Q]uit\n  > ', (answer) => {
+        try {
+          const choice = answer.trim().toLowerCase();
+          switch (choice) {
+            case 'o':
+              rl.close();
+              resolve('overwrite');
+              break;
+            case 's':
+              rl.close();
+              resolve('skip');
+              break;
+            case 'd':
+              try {
+                const diff = showUnifiedDiff(src, dest);
+                log(`\n${diff}\n`, 'cyan');
+              } catch (err) {
+                logWarn(`Could not generate diff: ${relPath}`);
+              }
+              ask();
+              break;
+            case 'a':
+              rl.close();
+              resolve('all-overwrite');
+              break;
+            case 'q':
+              rl.close();
+              resolve('quit');
+              break;
+            default:
+              ask();
+              break;
+          }
+        } catch (err) {
+          logWarn(`Error processing input: ${err.message}`);
+          ask();
+        }
+      });
+    };
+    ask();
+  });
+}
+
 function main() {
   log('\n' + '='.repeat(60), 'cyan');
   log('  Everything Qwen Code - Global Installer', 'bright');
