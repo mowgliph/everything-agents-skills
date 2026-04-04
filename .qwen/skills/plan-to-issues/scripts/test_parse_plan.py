@@ -1,5 +1,7 @@
 import unittest
-from parse_plan import extract_tasks, detect_labels
+from parse_plan import extract_tasks, detect_labels, find_latest_plan
+import os
+import tempfile
 
 class TestExtractTasks(unittest.TestCase):
     def test_extract_single_task(self):
@@ -109,3 +111,21 @@ class TestDetectLabels(unittest.TestCase):
         }
         labels = detect_labels(task)
         self.assertIn('security', labels)
+
+
+class TestFindLatestPlan(unittest.TestCase):
+    def test_find_latest_plan(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            plans_dir = os.path.join(tmpdir, 'docs', 'plans')
+            os.makedirs(plans_dir)
+
+            open(os.path.join(plans_dir, '2026-04-01-old.md'), 'w').close()
+            open(os.path.join(plans_dir, '2026-04-04-new.md'), 'w').close()
+
+            latest = find_latest_plan(plans_dir)
+            self.assertIn('2026-04-04-new.md', latest)
+
+    def test_no_plans(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result = find_latest_plan(tmpdir)
+            self.assertIsNone(result)

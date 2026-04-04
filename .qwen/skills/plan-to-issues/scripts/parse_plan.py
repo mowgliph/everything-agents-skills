@@ -18,6 +18,8 @@ Expected markdown format:
 import re
 import sys
 import json
+import os
+import glob
 
 
 def extract_tasks(plan_text: str) -> list[dict]:
@@ -109,3 +111,12 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
+
+
+def find_latest_plan(plans_dir: str) -> str | None:
+    """Find the most recent plan file in docs/plans/."""
+    pattern = os.path.join(plans_dir, '*.md')
+    files = glob.glob(pattern)
+    if not files:
+        return None
+    return max(files, key=os.path.getmtime)
