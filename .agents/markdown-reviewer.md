@@ -64,12 +64,32 @@ const x = 1;
 - **Deprecated API mentions** — Documenting deprecated methods as current
 - **Broken examples** — Code examples that would fail if executed
 
+```md
+<!-- BAD: Outdated version requirement -->
+Requires Node 14 or later.
+
+<!-- GOOD: Current version -->
+Requires Node 18 or later.
+```
+
 ### Formatting (LOW)
 
 - **Trailing whitespace** — Spaces at end of lines
 - **Inconsistent list markers** — Mixing `-` and `*` in same list
 - **Multiple consecutive blank lines** — More than one blank line between paragraphs
 - **Missing blank lines** — No blank line before/after headings, lists, or code blocks
+
+```md
+<!-- BAD: Inconsistent list markers -->
+- Item one
+* Item two
+- Item three
+
+<!-- GOOD: Consistent markers -->
+- Item one
+- Item two
+- Item three
+```
 
 ## Output Format
 
