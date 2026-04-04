@@ -8,11 +8,11 @@ and this adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
-- Token efficiency behavior rules in `~/.qwen/QWEN.md` — reduces output tokens by ~50-63%
-- `scripts/merge-token-rules.js` — idempotent merge utility for installer
-- `docs/token-efficiency.md` — full reference document with benchmarks
-- `bin/eqw-install` now auto-installs token efficiency rules
-- Tests for merge utility (4 test cases)
+- **fix-issue Skill** — Complete development workflow with TDD, GitHub issues, and PR automation
+  - Brainstorming-first workflow enforcement
+  - GitHub issue creation before code changes
+  - Feature branch + PR workflow with user confirmation before merge
+  - TDD integration (RED → GREEN → IMPROVE)
 
 ## [0.4.0] - 2026-04-04
 
