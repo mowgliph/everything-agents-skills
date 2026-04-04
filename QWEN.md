@@ -143,6 +143,9 @@ node scripts/setup-mcp-servers.js --status
 
 ### Git Workflow
 
+- **NEVER commit directly to main** — Always create a feature branch (`feat/descriptive-name`) before making changes
+- If on `main` and need to make changes: `git checkout -b feat/name` first
+- All changes to `main` must go through a PR
 - Commit format: `<type>: <description>` — Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`
 - Conventional commits format
 - Comprehensive PR summaries
