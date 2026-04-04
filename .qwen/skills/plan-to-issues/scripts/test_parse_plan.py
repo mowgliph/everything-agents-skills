@@ -1,5 +1,5 @@
 import unittest
-from parse_plan import extract_tasks
+from parse_plan import extract_tasks, detect_labels
 
 class TestExtractTasks(unittest.TestCase):
     def test_extract_single_task(self):
@@ -60,3 +60,52 @@ test code
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TestDetectLabels(unittest.TestCase):
+    def test_single_label_match(self):
+        task = {
+            'title': 'Write tests for users',
+            'files': '',
+            'steps': [{'title': 'pytest', 'content': 'test code'}],
+        }
+        labels = detect_labels(task)
+        self.assertIn('testing', labels)
+
+    def test_multi_label_match(self):
+        task = {
+            'title': 'Add API endpoint',
+            'files': '- Create: `src/api/users.py`',
+            'steps': [{'title': 'Write test', 'content': 'test endpoint'}],
+        }
+        labels = detect_labels(task)
+        self.assertIn('api', labels)
+        self.assertIn('testing', labels)
+        self.assertIn('enhancement', labels)
+
+    def test_no_match_fallback(self):
+        task = {
+            'title': 'Do something xyz',
+            'files': '',
+            'steps': [{'title': 'Step', 'content': 'stuff'}],
+        }
+        labels = detect_labels(task)
+        self.assertEqual(labels, ['task'])
+
+    def test_database_label_detection(self):
+        task = {
+            'title': 'Create user model',
+            'files': '- Create: `src/models/user.py`',
+            'steps': [{'title': 'Write test', 'content': 'test model'}],
+        }
+        labels = detect_labels(task)
+        self.assertIn('database', labels)
+
+    def test_security_label_detection(self):
+        task = {
+            'title': 'Add auth middleware',
+            'files': '- Create: `src/middleware/auth.py`',
+            'steps': [{'title': 'Test validation', 'content': 'verify token'}],
+        }
+        labels = detect_labels(task)
+        self.assertIn('security', labels)
