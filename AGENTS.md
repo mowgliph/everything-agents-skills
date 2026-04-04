@@ -129,9 +129,11 @@ Troubleshoot failures: check test isolation â†’ verify mocks â†’ fix i
 
 ## Git Workflow
 
-**Commit format:** `<type>: <description>` â€” Types: feat, fix, refactor, docs, test, chore, perf, ci
+**NEVER commit directly to main** — Always create a feature branch (`feat/descriptive-name`) before making changes. If on `main` and need to make changes: `git checkout -b feat/name` first. All changes to `main` must go through a PR.
 
-**PR workflow:** Analyze full commit history â†’ draft comprehensive summary â†’ include test plan â†’ push with `-u` flag.
+**Commit format:** `<type>: <description>` â€" Types: feat, fix, refactor, docs, test, chore, perf, ci
+
+**PR workflow:** Analyze full commit history â†' draft comprehensive summary â†' include test plan â†' push with `-u` flag.
 
 ## Architecture Patterns
 
