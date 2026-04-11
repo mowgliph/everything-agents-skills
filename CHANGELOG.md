@@ -7,12 +7,27 @@ and this adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-04-11
+
 ### Added
-- **fix-issue Skill** — Complete development workflow with TDD, GitHub issues, and PR automation
-  - Brainstorming-first workflow enforcement
-  - GitHub issue creation before code changes
-  - Feature branch + PR workflow with user confirmation before merge
-  - TDD integration (RED → GREEN → IMPROVE)
+- **21 Agent Skills** from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills):
+  - `api-and-interface-design`, `browser-testing-with-devtools`, `ci-cd-and-automation`
+  - `code-review-and-quality`, `code-simplification`, `context-engineering`
+  - `debugging-and-error-recovery`, `deprecation-and-migration`, `documentation-and-adrs`
+  - `frontend-ui-engineering`, `git-workflow-and-versioning`, `idea-refine`
+  - `incremental-implementation`, `performance-optimization`, `planning-and-task-breakdown`
+  - `security-and-hardening`, `shipping-and-launch`, `source-driven-development`
+  - `spec-driven-development`, `test-driven-development`, `using-agent-skills`
+- **Cross-reference** in `git-workflow-and-versioning` pointing to `github-pr-merge-workflow`
+- **Documentation**: CONFIGURATION.md, OMEGA-MEMORY-SETUP.md, installer diff check plans
+
+### Changed
+- **github-pr-merge-workflow**: Removed self-approval step — direct merge after disabling branch protection as admin/collaborator
+
+### Technical Details
+- **Files Created:** 30 files
+- **Files Modified:** 2 files
+- **Lines Added:** ~7,367 lines
 
 ## [0.5.0] - 2026-04-10
 
